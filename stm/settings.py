@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'stm_app',
     'kronos',
-    'django_extensions',
     'rest_framework',
 ]
 
