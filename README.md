@@ -1,7 +1,7 @@
 # STM
 Simple Tasks Manager
 
-<p>Before you start working with project, you need to install the following jango pads:</p>
+<p>Before you start working with project, you need to install the following Django pads:</p>
 
 <i>pip install kronos</i><br>
 <i>pip install djangorestframework</i>
