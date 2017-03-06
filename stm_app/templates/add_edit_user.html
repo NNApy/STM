@@ -79,9 +79,11 @@
 </div>
 {#</div>#}
 </div>
-{#    <link rel="stylesheet" href="http://bootstraptema.ru/plugins/2015/bootstrap3/bootstrap.min.css" />#}
-    <script src="http://bootstraptema.ru/plugins/jquery/jquery-1.11.3.min.js"></script>
-    <script src="http://bootstraptema.ru/plugins/2015/b-v3-3-6/bootstrap.min.js"></script>
-    <script src="http://bootstraptema.ru/plugins/2016/validator/validator.min.js"></script>
+
+    {% load static %}
+
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-3.3.6.min.js' %}"></script>
+    <script src="{% static 'js/validator.min.js' %}"></script>
 
 {% endblock %}
