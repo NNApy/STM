@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>First Launch STM - Create Manager</title>
+    <link rel="stylesheet" href="http://bootstraptema.ru/plugins/2015/bootstrap3/bootstrap.min.css" />
+    <script src="http://bootstraptema.ru/plugins/jquery/jquery-1.11.3.min.js"></script>
+    <script src="http://bootstraptema.ru/plugins/2015/b-v3-3-6/bootstrap.min.js"></script>
+    <script src="http://bootstraptema.ru/plugins/2016/validator/validator.min.js"></script>
+
+</head>
+<body>
+
+
+
+<div class="container-fluid" style="padding-top: 100px">
+    <div class="col-md-8 col-md-offset-2">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissable" role="alert" style="width: 85%">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p style="text-align: center"><b>{{ message }}</b></p>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="alert alert-success alert-dismissible fade in">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4 align="center">Hello! This is the first launch of the Simple Task Manager.
+                        <br>Please create the first manager to continue.</h4>
+            </div>
+     </div>
+        {% endif %}
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form data-toggle="validator" role="form" action="{% url 'start' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="inputName" class="control-label">First Name</label>
+                    <input type="text" class="form-control" name='fname' id="inputName" placeholder="" required>
+                    <label for="inputName" class="control-label">Last Name</label>
+                    <input type="text" class="form-control" name='lname' id="inputName" placeholder="" required>
+
+                    <label for="inputEmail" class="control-label">E-mail</label>
+                    <input type="email" name='email' class="form-control" id="inputEmail" placeholder="" data-error="Incorrect E-mail" required>
+                    <label for="inputName" class="control-label">Username (Login)</label>
+                    <input type="text" class="form-control" name='username' id="inputName" placeholder="" required>
+                    <label for="inputPassword" class="control-label">Password</label>
+                    <div class="form-inline row">
+                        <div class="form-group col-sm-6">
+                            <input type="password" name='password' data-toggle="validator" data-minlength="6" class="form-control" id="inputPassword" placeholder="123456" required>
+                            <span class="help-block">minimum of 6 characters</span>
+                        </div>
+                    <div class="form-group col-sm-6">
+                        <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Error! Passwords do not match!" placeholder="replace password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+

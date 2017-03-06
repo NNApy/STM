@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block projects %}
+
+    <table width="100%">
+        <tr>
+            <td><h1>Projects</h1></td>
+            <td align="right"><a href="{% url 'add_edit_project' %}" class="btn btn-success">Create Project</a></td>
+        </tr>
+    </table>
+
+
+    <table class="table">
+        <thead>
+            <th>#</th>
+            <th>Project name</th>
+            <th>Description</th>
+            <th>Managers</th>
+            <th>Developers</th>
+            <th>Actions</th>
+
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td align="center" >
+                        {{ forloop.counter }}
+                    </td>
+                    <td align="center">
+                        {{ project.project_name }}
+                    </td>
+                    <td>
+                        {{ project.description }}
+                    </td>
+                    <td align="center">
+                        {% for user in project.users.values %}
+                            {% if user.is_superuser == True %}
+                                <p>{{ user.first_name }} {{ user.last_name }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td align="center">
+                        {% for user in project.users.values %}
+                            {% if user.is_superuser == False %}
+                                <p>{{ user.first_name }} {{ user.last_name }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    <td align="center">
+                        <table style="border-collapse: separate; border-spacing: 5px;">
+                            <tr>
+                                <td><a href="{% url 'add_edit_project' %}?p_id={{ project.id }}" class="btn btn-warning">edit</a></td>
+                                <form action="{% url 'del_project' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="p_id" value="{{ project.id }}">
+                                    <td><input type="submit" class="btn btn-danger" value="del"></td>
+                                </form>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

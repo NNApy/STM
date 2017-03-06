@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block tasks %}
+
+    <h3>Tasks</h3>
+    <table class="table">
+        <thead>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Project</th>
+            <th>Managers</th>
+            <th>Developers</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+                    <td>
+                        {{ task.title }}
+                    </td>
+                    <td>
+                        {{ task.description }}
+                    </td>
+                    <td align="center">
+                        {{ task.due_date|date:'d.m.Y' }}
+                    </td>
+                    <td align="center">
+                        {{ task.id_project.project_name }}
+                    </td>
+                    <td align="center">
+                        {% for user in task.task_users.values %}
+                            {% if user.is_superuser %}
+                                {% if request.user|stringformat:'s' == user.username %}
+                                    <p style="color:green;"><b>{{ user.first_name }} {{ user.last_name }}</b></p>
+                                {% else %}
+                                    <p>{{ user.first_name }} {{ user.last_name }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td align="center">
+                        {% for user in task.task_users.values %}
+                            {% if user.is_superuser == False %}
+                               <p>{{ user.first_name }} {{ user.last_name }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td align="center">
+                        <table style="border-collapse: separate; border-spacing: 5px;">
+                            <tr>
+                                <td><a href="{% url 'add_edit_task' %}?t_id={{ task.id }}" class="btn btn-warning">edit</a></td>
+                                <form action="{% url 'del_task' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="t_id" value="{{ task.id }}">
+                                    <td><input type="submit" class="btn btn-danger" value="del"></td>
+                                </form>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr></tr>
+        </tbody>
+    </table>
+
+{% endblock %}
+

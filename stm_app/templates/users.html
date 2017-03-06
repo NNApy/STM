@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block users %}
+
+    <table width="100%">
+        <tr>
+            <td><h1>Users</h1></td>
+            <td align="right"><a href="{% url 'add_edit_user' %}" class="btn btn-success">Create User</a></td>
+        </tr>
+    </table>
+
+
+    <table class="table">
+        <thead>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Position</th>
+            <th>Login</th>
+            <th>Email</th>
+            <th>Last Login</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td align="center">
+                        {{ forloop.counter }}
+                    </td>
+                    <td>
+                        {{ user.first_name }}
+                    </td>
+                    <td>
+                        {{ user.last_name }}
+                    </td>
+                    <td align="center">
+                        {% if user.is_superuser == 1 %}
+                            Manager
+                        {% else %}
+                            Developer
+                        {% endif %}
+                    </td>
+                    <td align="center">
+                        {{ user.username }}
+                    </td>
+                    <td align="center">
+                        {{ user.email }}
+                    </td>
+                    <td align="center">
+                        {{ user.last_login|date:"d.m.Y H:i" }}
+                    </td>
+                    <td align="center">
+                        <table style="border-collapse: separate; border-spacing: 5px;">
+                            <tr>
+                                <td><a href="{% url 'add_edit_user' %}?u_id={{ user.id }}" class="btn btn-warning">edit</a></td>
+                                <form action="{% url 'delete_user' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="u_id" value="{{ user.id }}">
+                                    <td><input type="submit" class="btn btn-danger" value="del"></td>
+                                </form>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

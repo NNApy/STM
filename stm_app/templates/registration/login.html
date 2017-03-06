@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Enter to Simple Task Manager</title>
+    <link href="{%  static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{%  static 'css/jquery-ui.css' %}" rel="stylesheet">
+
+    <script src="{%  static 'js/bootstrap.min.js' %}"></script>
+    <script src="{%  static 'js/docs.min.js' %}"></script>
+    <script src="{%  static 'js/jquery-ui.js' %}"></script>
+
+</head>
+<body>
+
+
+
+<div class="container-fluid" style="padding-top: 100px">
+  <div class="col-md-4 col-xs-12 col-md-offset-4">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>Enter to Simple Task Manager</h4>
+    </div>
+    <div class="panel-body">
+      <form class="simple_form new_user" id="new_user" action="{% url 'login' %}" accept-charset="UTF-8" method="post">
+        {% csrf_token %}
+          <div class="form-inputs">
+                <div class="form-group string required user_username"><label class="string required control-label" for="user_username"><abbr title="обязательное" style="color: red">*</abbr> Login</label><input class="string required form-control" autofocus="autofocus" placeholder="Enter your login" type="text" name="username" id="user_username" required/></div>
+                <div class="form-group password required user_password"><label class="password required control-label" for="user_password"><abbr title="обязательное" style="color: red">*</abbr> Password</label><input class="password required form-control" placeholder="Enter your password" type="password" name="password" id="user_password" required/></div>
+                <input type="hidden" name="next" value="/control/">
+        </div>
+        <div class="form-actions">
+          <input type="submit" name="commit" value="Enter" class="btn btn-default" />
+        </div>
+      </form>
+    </div>
+    <div class="panel-footer">
+      <p class="text-center">Please enter your login and password</p>
+    </div>
+  </div>
+  </div>
+</div>
+
+</body>
+</html>
+

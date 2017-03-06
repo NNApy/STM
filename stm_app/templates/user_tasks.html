@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Simple Task Manager{% endblock %}</title>
+
+    <link href="{%  static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{%  static 'css/jquery-ui.css' %}" rel="stylesheet">
+
+    <script src="{%  static 'js/bootstrap.min.js' %}"></script>
+    <script src="{%  static 'js/docs.min.js' %}"></script>
+    <script src="{%  static 'js/jquery-ui.js' %}"></script>
+
+</head>
+<body>
+
+<div class="navbar-wrapper">
+      <div class="container">
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="{% url 'tasks' %}">Simple Task Manager</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a style="color: white;">Hello, {{ user.username }}</a></li>
+                <li style="padding-right: 40px"><a href="{% url 'logout' %}">Logout</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissable" role="alert" align="center">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p style="text-align: center"><b>{{ message }}</b></p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    <h3>Tasks</h3>
+    <table class="table">
+        <thead>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Project</th>
+            <th>Managers</th>
+            <th>Developers</th>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+                    <td>
+                        {{ task.title }}
+                    </td>
+                    <td>
+                        {{ task.description }}
+                    </td>
+                    <td align="center">
+                        {{ task.due_date|date:'d.m.Y' }}
+                    </td>
+                    <td align="center">
+                        {{ task.id_project.project_name }}
+                    </td>
+                    <td align="center">
+                        {% for user in task.task_users.values %}
+                            {% if user.is_superuser %}
+                                    <p>{{ user.first_name }} {{ user.last_name }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td align="center">
+                        {% for user in task.task_users.values %}
+                            {% if not user.is_superuser %}
+                                {% if request.user|stringformat:'s' == user.username %}
+                                    <p style="color:green;"><b>{{ user.first_name }} {{ user.last_name }}</b></p>
+                                {% else %}
+                                    <p>{{ user.first_name }} {{ user.last_name }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+            <tr></tr>
+        </tbody>
+    </table>
+
+
+        </div>
+</div>
+
+</body>
+</html>

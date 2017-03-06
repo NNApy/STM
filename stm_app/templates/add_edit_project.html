@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block add_edit_project %}
+
+<div class="col-md-8 col-md-offset-2">
+    {% if project_data %}
+        <h1 class="page-header">Edit Project</h1>
+    {% else %}
+        <h1 class="page-header">Add Project</h1>
+    {% endif %}
+
+<form data-toggle="validator" role="form" action="{% url 'add_edit_project' %}" method="post" style="display: inline">
+                {% csrf_token %}
+                <div class="form-group">
+
+                    <label for="inputProjectName" class="control-label">Project Name</label>
+                    <input type="text" class="form-control" name='project_name' id="inputProjectName" placeholder="" required value="{{ project_data.project_name }}">
+
+                    <label for="inputDescription" class="control-label">Description</label>
+                    <textarea class="form-control" name='description' id="inputDescription" placeholder="" rows="4">{{ project_data.description }}</textarea>
+
+                    <label for="selectUsers" class="control-label">Users</label>
+                    <select size="10" multiple name="users" class="form-control" id="selectUsers" required>
+
+                        {% for user in all_users %}
+{#                            {% for user_sel in users %}#}
+                                {% if user.id in select_user_is %}
+                                    <option selected value="{{ user.id }}">
+                                {% else %}
+                                    <option value="{{ user.id }}">
+                                {% endif %}
+                                        {{ user.first_name }} {{ user.last_name }}
+                                        {% if user.is_superuser %}
+                                            -- Manager
+                                        {% else %}
+                                            -- Developer
+                                        {% endif %}
+                                    </option>
+{#                            {% endfor %}#}
+                        {% endfor %}
+                    </select>
+                </div>
+                     <div style="text-align:center">
+                         <input type="hidden" value="{{ project_data.id }}" name="p_id">
+                         <input type="submit" class="btn btn-primary btn-lg" value="Save">
+                     </div>
+
+</form>
+
+<div align="right">
+{% if project_data %}
+<form action="{% url 'del_project' %}" method="post" style="display: inline" >
+    {% csrf_token %}
+     <input type="hidden" value="{{ user_data.id }}" name="p_id">
+    <input type="submit" class="btn btn-danger btn-lg" value="Delete">
+
+</form>
+
+{% endif %}
+</div>
+</div>
+
+{#    <link rel="stylesheet" href="http://bootstraptema.ru/plugins/2015/bootstrap3/bootstrap.min.css" />#}
+    <script src="http://bootstraptema.ru/plugins/jquery/jquery-1.11.3.min.js"></script>
+    <script src="http://bootstraptema.ru/plugins/2015/b-v3-3-6/bootstrap.min.js"></script>
+    <script src="http://bootstraptema.ru/plugins/2016/validator/validator.min.js"></script>
+
+
+
+{% endblock %}

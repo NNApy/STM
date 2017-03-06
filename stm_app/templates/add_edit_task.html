@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block add_edit_task %}
+
+<div class="col-md-8 col-md-offset-2">
+    {% if task_data %}
+        <h1 class="page-header">Edit Task for "{{ project.project_name }}" project</h1>
+    {% else %}
+        <h1 class="page-header">Add Task</h1>
+    {% endif %}
+
+<form role="form" action="{% url 'add_edit_task' %}" method="post" style="display: inline">
+                {% csrf_token %}
+                <div class="form-group">
+
+                    <label for="inputTitle" class="control-label">Title</label>
+                    <input type="text" class="form-control" name='title' id="inputProjectName" placeholder="" required value="{{ task_data.title }}">
+
+                    <label for="inputDescription" class="control-label">Description</label>
+                    <textarea class="form-control" name='description' id="inputDescription" placeholder="" rows="4">{{ task_data.description }}</textarea>
+
+                    <label for="inputDueDate" class="control-label">Due Date</label>
+                    <input type="date" name="due_date" class="form-control" id="inputDueDate" required value="{{ task_data.due_date|date:"Y-m-d" }}">
+
+                    {% if not task_data %}
+
+                    <label for="selectProject" class="control-label">Project</label>
+                    <select name="project" class="form-control" id="selectProject" required>
+                        <option></option>
+                        {% for project in projects %}
+                                {% if project.id == task_data.id_project_id %}
+                                    <option selected value="{{ project.id }}">
+                                {% else %}
+                                    <option value="{{ project.id }}">
+                                {% endif %}
+                                        {{ project.project_name }}
+                                    </option>
+                        {% endfor %}
+                    </select>
+
+                     {% endif %}
+
+                {% if project_users %}
+
+                    <table class="table">
+                        <tr>
+                            <td>
+                            <label for="selectManagers" class="control-label">Managers</label>
+                            <select size="10" multiple name="users" class="form-control" id="selectManagers" required>
+
+                                {% for manager in project_users %}
+                                    {% if manager.is_superuser %}
+                                        {% if manager.id in select_user_is %}
+                                            <option selected value="{{ manager.id }}">
+                                        {% else %}
+                                            <option value="{{ manager.id }}">
+                                        {% endif %}
+                                                {{ manager.first_name }} {{ manager.last_name }}
+                                            </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <label for="selectDevelopers" class="control-label">Developers</label>
+                            <select size="10" multiple name="users" class="form-control" id="selectDevelopers" required>
+
+                                {% for developer in project_users %}
+                                    {% if developer.is_superuser == False %}
+                                        {% if developer.id in select_user_is %}
+                                            <option selected value="{{ developer.id }}">
+                                        {% else %}
+                                            <option value="{{ developer.id }}">
+                                        {% endif %}
+                                                {{ developer.first_name }} {{ developer.last_name }}
+                                            </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+
+                {% endif %}
+                <br><br>
+                <div style="text-align:center">
+                    <input type="hidden" value="{{ task_data.id }}" name="t_id">
+                    {% if task_data %}
+                             <input type="submit" class="btn btn-primary btn-lg" value="Save">
+                    {% else %}
+                             <input type="submit" class="btn btn-success btn-lg" value="Next">
+                    {% endif %}
+                </div>
+</form>
+
+<div align="right">
+{% if task_data %}
+<form action="{% url 'del_task' %}" method="post" >
+    {% csrf_token %}
+     <input type="hidden" value="{{ task_data.id }}" name="t_id">
+    <input type="submit" class="btn btn-danger btn-lg" value="Delete">
+
+</form>
+{% endif %}
+</div>
+</div>
+{#    <link rel="stylesheet" href="http://bootstraptema.ru/plugins/2015/bootstrap3/bootstrap.min.css" />#}
+    <script src="http://bootstraptema.ru/plugins/jquery/jquery-1.11.3.min.js"></script>
+    <script src="http://bootstraptema.ru/plugins/2015/b-v3-3-6/bootstrap.min.js"></script>
+    <script src="http://bootstraptema.ru/plugins/2016/validator/validator.min.js"></script>
+
+
+{% endblock %}
